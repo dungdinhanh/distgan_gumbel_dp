@@ -232,7 +232,7 @@ def load_fire_department(data_dir, filenames, _categorical_softmax_use = 1):
             if(properties['type']=='enum'):
                 sdim.append(properties['count'])
                 dtype.append(1)
-    real_data = bin_data.as_matrix()
+    real_data = bin_data.values
     label = np.array([0]*305133)
     # print(sdim)
     # exit()
@@ -729,12 +729,12 @@ class Dataset(object):
         return self.batch_size
 
     def next_batch(self):
-        if self.name in ['creditcardfraud', 'uci_epileptic_seizure', 'cervical_cancer', 'fire_department_integer', 'fire_department_categorical']:
+        if self.name in ['creditcardfraud', 'uci_epileptic_seizure', 'cervical_cancer', 'fire_department_integer', 'fire_department_categorical', 'fire_department']:
             if self.count == len(self.minibatches):
                 self.count = 0
                 self.minibatches, self.minilabels = self.random_mini_batches(self.data.T, self.labels.T, self.batch_size, self.seed)
             batch = np.concatenate([self.minibatches[self.count], self.minilabels[self.count]],axis=0)
-            if(self.name in ['fire_department_integer', 'fire_department_categorical']):
+            if(self.name in ['fire_department_integer', 'fire_department_categorical', 'fire_department']):
                 return self.minibatches[self.count].T
             self.count = self.count + 1
             return batch.T
